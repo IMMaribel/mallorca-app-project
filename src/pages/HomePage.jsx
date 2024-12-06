@@ -1,57 +1,68 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Header from '../components/Header';
-import Stories from '../components/Stories';
-import { setStories } from '../features/stories/storiesSlice';
-import Flashcards from '../components/Flashcards';
-import NewsSection from '../components/NewsSection';
-import Navbar from '../components/Navbar';
-import sightsImage from '../assets/stories/sights1.jpg';
-import experienceImage from '../assets/stories/experience1.jpg';
-import artsImage from '../assets/stories/arts1.jpg';
-import shoppingImage from '../assets/stories/shopping1.jpg';
-import foodImage from '../assets/stories/food1.jpg';
-import hotelsImage from '../assets/stories/hotel1.jpg';
-import attractionsImage from '../assets/stories/atractions1.jpg';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import Header from "../components/Header";
+import Stories from "../components/Stories";
+import StoryModal from "../components/StoryModal";
+import Flashcards from "../components/Flashcards";
+import NewsSection from "../components/NewsSection";
+import Navbar from "../components/Navbar";
+import sights1 from "../assets/stories/sights1.jpg";
+import sights2 from "../assets/stories/sights2.jpg";
+import sights3 from "../assets/stories/sights3.jpg";
+import experience1 from "../assets/stories/experience1.jpg";
+import experience2 from "../assets/stories/experience2.jpg";
+import experience3 from "../assets/stories/experience3.jpg";
+import arts1 from "../assets/stories/arts1.jpg";
+import arts2 from "../assets/stories/arts2.jpg";
+import atractions1 from "../assets/stories/atractions1.jpg";
+import atractions2 from "../assets/stories/atractions2.jpg";
+import food1 from "../assets/stories/food1.jpg";
+import food2 from "../assets/stories/food2.jpg";
+import food3 from "../assets/stories/food3.jpg";
+import hotel1 from "../assets/stories/hotel1.jpg";
+import hotel2 from "../assets/stories/hotel2.jpg";
+import shopping1 from "../assets/stories/shopping1.jpg";
+import shopping2 from "../assets/stories/shopping2.jpg";
 
+const imageMap = {
+  1: sights1,
+  2: sights2,
+  3: sights3,
+  4: experience1,
+  5: experience2,
+  6: experience3,
+  7: arts1,
+  8: arts2,
+  9: shopping1,
+  10: shopping2,
+  11: food1,
+  12: food2,
+  13: food3,
+  14: hotel1,
+  15: hotel2,
+  16: atractions1,
+  17: atractions2
+};
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  // Estado para tema oscuro/claro
   const [isDarkTheme, setIsDarkTheme] = useState(false);
-  // Estado del idioma desde Redux
   const currentLanguage = useSelector((state) => state.language.language);
-  // Obtener las historias del estado global
-  const stories = useSelector((state) => state.stories.stories);
+  const categories = useSelector((state) => state.stories.categories);
 
-  // Función para alternar el tema
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
-    document.documentElement.classList.toggle('dark');
+    document.documentElement.classList.toggle("dark");
   };
 
-  // Simular la carga de historias
-  useEffect(() => {
-    // Datos historias
-    const fetchedStories = [
-        { imageUrl: sightsImage, title: 'Sights' },
-        { imageUrl: experienceImage, title: 'Experience' },
-        { imageUrl: artsImage, title: 'Arts' },
-        { imageUrl: shoppingImage, title: 'Shopping' },
-        { imageUrl: foodImage, title: 'Food' },
-        { imageUrl: hotelsImage, title: 'Hotels' },
-        { imageUrl: attractionsImage, title: 'Attractions' },
-      ];      
-    dispatch(setStories(fetchedStories));
-  }, [dispatch]);
-
   return (
-    <div className={`min-h-screen ${isDarkTheme ? 'bg-dark text-white' : 'bg-light text-dark'}`}>
+    <div className={`min-h-screen ${isDarkTheme ? "bg-dark text-white" : "bg-light text-dark"}`}>
       <Header toggleTheme={toggleTheme} isDarkTheme={isDarkTheme} />
-      <Stories stories={stories} />
+      {/* Solo pasamos las categorías al componente Stories */}
+      <Stories categories={categories} imageMap={imageMap} />
+      <StoryModal imageMap={imageMap} />
       <div className="p-4">
         <h1 className="text-2xl font-bold">
-          {currentLanguage === 'en' ? 'Inspire Me' : 'Inspírame'}
+          {currentLanguage === "en" ? "Inspire Me" : "Inspírame"}
         </h1>
       </div>
       <Flashcards />

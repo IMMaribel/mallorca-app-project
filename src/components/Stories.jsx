@@ -1,10 +1,14 @@
-import PropTypes from 'prop-types';
-import Slider from 'react-slick';
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import MyStory from './MyStory';
+import MyStory from "./MyStory";
+import { useDispatch } from "react-redux";
+import { setActiveCategory } from "../features/stories/storiesSlice";
+import PropTypes from "prop-types";
 
-const Stories = ({ stories }) => {
+const Stories = ({ categories, imageMap }) => {
+  const dispatch = useDispatch();
+
   const settings = {
     dots: false,
     infinite: false,
@@ -48,28 +52,47 @@ const Stories = ({ stories }) => {
   return (
     <div className="p-2">
       <Slider {...settings}>
-        <div className='pl-4'>
+        <div className="pl-4">
           <MyStory />
         </div>
-        {stories.map((story, index) => (
-          <div key={index} className="flex flex-col items-center justify-center ml-4">
-            <div className="w-20 h-20 rounded-full border-2 border-[#00bcd4] overflow-hidden flex items-center justify-center">
-              <img src={story.imageUrl} alt="Story" className="w-full h-full p-0.5 object-cover rounded-full" />
+        {categories.map((category, index) => {
+          const firstStory = category.stories[0];
+          const imageSrc = imageMap[firstStory.id];
+          return (
+            <div
+              key={category.name}
+              className="flex flex-col items-center justify-center ml-4 cursor-pointer text-center"
+              onClick={() => dispatch(setActiveCategory(index))}
+            >
+              <div className="w-20 h-20 rounded-full border-2 border-[#00bcd4] overflow-hidden">
+                <img
+                  src={imageSrc}
+                  alt={firstStory.title}
+                  className="w-full h-full object-cover rounded-full p-0.5"
+                />
+              </div>
+              <span className="text-xs mr-2 mt-2">{category.name}</span>
             </div>
-              <span className="text-xs mr-2 mt-2 text-gray-500 text-center block">{story.title}</span>
-        </div>
-        ))}
+          );
+        })}
       </Slider>
     </div>
   );
 };
 
 Stories.propTypes = {
-  stories: PropTypes.arrayOf(
+  categories: PropTypes.arrayOf(
     PropTypes.shape({
-      imageUrl: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      stories: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          title: PropTypes.string.isRequired,
+        })
+      ).isRequired,
     })
   ).isRequired,
+  imageMap: PropTypes.object.isRequired,
 };
 
 export default Stories;
