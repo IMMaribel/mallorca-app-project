@@ -6,6 +6,14 @@ import { setStories } from '../features/stories/storiesSlice';
 import Flashcards from '../components/Flashcards';
 import NewsSection from '../components/NewsSection';
 import Navbar from '../components/Navbar';
+import sightsImage from '../assets/stories/sights1.jpg';
+import experienceImage from '../assets/stories/experience1.jpg';
+import artsImage from '../assets/stories/arts1.jpg';
+import shoppingImage from '../assets/stories/shopping1.jpg';
+import foodImage from '../assets/stories/food1.jpg';
+import hotelsImage from '../assets/stories/hotel1.jpg';
+import attractionsImage from '../assets/stories/atractions1.jpg';
+
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -22,26 +30,30 @@ const HomePage = () => {
     document.documentElement.classList.toggle('dark');
   };
 
-  // Simular la carga de historias al cargar la página
+  // Simular la carga de historias
   useEffect(() => {
-    // Datos de ejemplo para las historias
+    // Datos historias
     const fetchedStories = [
-      { imageUrl: 'https://via.placeholder.com/150' },
-      { imageUrl: 'https://via.placeholder.com/150' },
-      { imageUrl: 'https://via.placeholder.com/150' },
-    ];
+        { imageUrl: sightsImage, title: 'Sights' },
+        { imageUrl: experienceImage, title: 'Experience' },
+        { imageUrl: artsImage, title: 'Arts' },
+        { imageUrl: shoppingImage, title: 'Shopping' },
+        { imageUrl: foodImage, title: 'Food' },
+        { imageUrl: hotelsImage, title: 'Hotels' },
+        { imageUrl: attractionsImage, title: 'Attractions' },
+      ];      
     dispatch(setStories(fetchedStories));
   }, [dispatch]);
 
   return (
     <div className={`min-h-screen ${isDarkTheme ? 'bg-dark text-white' : 'bg-light text-dark'}`}>
       <Header toggleTheme={toggleTheme} isDarkTheme={isDarkTheme} />
+      <Stories stories={stories} />
       <div className="p-4">
         <h1 className="text-2xl font-bold">
           {currentLanguage === 'en' ? 'Inspire Me' : 'Inspírame'}
         </h1>
       </div>
-      <Stories stories={stories} />
       <Flashcards />
       <NewsSection />
       <Navbar />

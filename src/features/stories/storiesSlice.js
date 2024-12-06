@@ -9,7 +9,10 @@ const storiesSlice = createSlice({
   initialState,
   reducers: {
     setStories: (state, action) => {
-      state.stories.push(action.payload);
+      state.stories = action.payload;
+    },
+    addStory: (state, action) => {
+      state.stories.push(action.payload); 
     },
   },
 });

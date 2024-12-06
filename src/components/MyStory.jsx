@@ -38,8 +38,8 @@ const MyStory = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <label className="cursor-pointer">
+    <div className="flex flex-col items-center justify-center">
+      <label className="cursor-pointer flex flex-col items-center">
         <input
           type="file"
           accept="image/*"
@@ -47,18 +47,18 @@ const MyStory = () => {
           onChange={handleImageChange}
           style={{ display: 'none' }}
         />
-        <div className={`w-24 h-24 rounded-full border-4 border-[#f06292] flex items-center justify-center overflow-hidden ${uploading ? 'animate-pulse' : ''}`}>
+        <div className={`w-20 h-20 rounded-full border-2 p-0.5 border-[#f06292] flex items-center justify-center overflow-hidden ${uploading ? 'animate-pulse' : ''}`}>
           {uploading ? (
             <span className="text-xs font-medium">Uploading...</span>
           ) : image ? (
-            <img src={image} alt="My Story" className="w-full h-full object-cover rounded-full" />
+            <img src={image} alt="My Story" className="w-full h-full object-cover rounded-full p-0.5" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-[#f06292]">
-              <span className="text-sm font-semibold">+</span>
+            <div className="w-full h-full flex items-center justify-center rounded-full bg-gray-300">
+              <span className="text-5xl text-gray-500 font-light mb-3">+</span>
             </div>
           )}
         </div>
-        <span className="text-xs font-medium mt-2 text-gray-700">My Story</span>
+        <span className="text-xs font-medium mt-2 text-gray-500">My Story</span>
       </label>
     </div>
   );
