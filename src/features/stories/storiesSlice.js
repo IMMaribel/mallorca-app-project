@@ -57,6 +57,7 @@ const initialState = {
   ],
   activeCategory: null,
   isModalOpen: false,
+  viewedCategories: [],
 };
 
 const storiesSlice = createSlice({
@@ -83,20 +84,23 @@ const storiesSlice = createSlice({
       if (category) {
         category.stories.push(story);
       } else {
-        // Si no existe la categoría, la creamos
-        state.categories.push({
-          name: categoryName,
-          stories: [story],
-        });
-      }
+    // Si la categoría no existe, no la creamos para evitar una nueva burbuja
+    console.warn(`La categoría ${categoryName} no está definida.`);
+    }
     },
     setActiveCategory(state, action) {
       state.activeCategory = action.payload;
       state.isModalOpen = true;
     },
+    markCategoryAsViewed(state, action) {
+      const categoryIndex = action.payload;
+      if (!state.viewedCategories.includes(categoryIndex)) {
+        state.viewedCategories.push(categoryIndex);
+      }
+    },
   },
 });
 
-export const { setStories, openModal, closeModal, addStory, setActiveCategory } = storiesSlice.actions;
+export const { setStories, openModal, closeModal, addStory, setActiveCategory, markCategoryAsViewed } = storiesSlice.actions;
 
 export default storiesSlice.reducer;

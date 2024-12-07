@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types"; 
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../features/stories/storiesSlice";
+import { closeModal, markCategoryAsViewed } from "../features/stories/storiesSlice";
 
 const StoryModal = ({ imageMap }) => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const StoryModal = ({ imageMap }) => {
   useEffect(() => {
     if (activeCategory !== null) {
       setCurrentCategoryIndex(activeCategory);
-      setCurrentStoryIndex(0); // Resetea la historia al inicio de la categoría
+      setCurrentStoryIndex(0); 
     }
   }, [activeCategory]);
 
@@ -26,10 +26,11 @@ const StoryModal = ({ imageMap }) => {
 
   // Cerrar el modal
   const handleClose = useCallback(() => {
+    dispatch(markCategoryAsViewed(currentCategoryIndex));
     dispatch(closeModal());
     setCurrentCategoryIndex(0);
     setCurrentStoryIndex(0);
-  }, [dispatch]);
+  }, [dispatch, currentCategoryIndex]);
 
   // Avanzar a la siguiente historia
   const nextStory = useCallback(() => {
@@ -64,12 +65,12 @@ const StoryModal = ({ imageMap }) => {
 
   // Avance automático de historias
   useEffect(() => {
-    const timer = setTimeout(nextStory, 3000); // Cambia cada 3 segundos
-    return () => clearTimeout(timer); // Limpia el temporizador al cambiar de historia
+    const timer = setTimeout(nextStory, 3000);
+    return () => clearTimeout(timer);
   }, [nextStory]);
 
   if (!isModalOpen || !currentStory) {
-    return null; // No renderiza nada si el modal está cerrado o no hay historias
+    return null; 
   }
 
   const imageSrc = imageMap[currentStory.id];
@@ -77,7 +78,7 @@ const StoryModal = ({ imageMap }) => {
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
-      onTouchStart={(e) => e.touches[0]?.clientY > 200 && handleClose()} // Cierra al deslizar hacia abajo
+      onTouchStart={(e) => e.touches[0]?.clientY > 200 && handleClose()} 
     >
       <div className="relative w-full max-w-lg mx-auto p-4 rounded-md text-white">
         {/* Imagen actual */}
@@ -87,9 +88,9 @@ const StoryModal = ({ imageMap }) => {
             const clickX = e.clientX;
             const width = window.innerWidth;
             if (clickX < width / 2) {
-              previousStory(); // Clic en la izquierda
+              previousStory(); 
             } else {
-              nextStory(); // Clic en la derecha
+              nextStory();
             }
           }}
         >

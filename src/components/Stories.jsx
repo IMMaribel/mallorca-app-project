@@ -2,12 +2,13 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MyStory from "./MyStory";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setActiveCategory } from "../features/stories/storiesSlice";
 import PropTypes from "prop-types";
 
 const Stories = ({ categories, imageMap }) => {
   const dispatch = useDispatch();
+  const viewedCategories = useSelector((state) => state.stories.viewedCategories);
 
   const settings = {
     dots: false,
@@ -58,18 +59,29 @@ const Stories = ({ categories, imageMap }) => {
         {categories.map((category, index) => {
           const firstStory = category.stories[0];
           const imageSrc = imageMap[firstStory.id];
+          const isViewed = viewedCategories.includes(index);
           return (
             <div
               key={category.name}
               className="flex flex-col items-center justify-center ml-4 cursor-pointer text-center"
               onClick={() => dispatch(setActiveCategory(index))}
             >
-              <div className="w-20 h-20 rounded-full border-2 border-[#00bcd4] overflow-hidden">
+            <div
+              className={`w-20 h-20 rounded-full overflow-hidden border-2 ${
+                isViewed ? "border-gray-400" : "border-[#00bcd4]"
+              }`}
+            >
+              {imageSrc ? (
                 <img
                   src={imageSrc}
                   alt={firstStory.title}
                   className="w-full h-full object-cover rounded-full p-0.5"
                 />
+                 ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-300">
+                  <span className="text-gray-500">No Image</span>
+                </div>
+                )}
               </div>
               <span className="text-xs mr-2 mt-2">{category.name}</span>
             </div>

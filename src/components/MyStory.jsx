@@ -28,7 +28,16 @@ const MyStory = () => {
         console.log("Image URL:", downloadURL);
 
         // Despachar la acción para agregar la URL al estado de Redux
-        dispatch(addStory({ imageUrl: downloadURL }));
+        dispatch(
+          addStory({
+            categoryName: "My Story", // Nombre de la categoría
+            story: {
+              id: Date.now(), // ID único basado en timestamp
+              title: file.name, // Nombre del archivo como título
+              image: downloadURL, // URL de descarga de Firebase
+            },
+          })
+        );
       } catch (error) {
         console.error("Error uploading file: ", error);
       } finally {
