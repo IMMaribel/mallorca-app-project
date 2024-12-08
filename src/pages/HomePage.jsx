@@ -66,7 +66,17 @@ const HomePage = () => {
         </h1>
       </div>
       <Flashcards />
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">
+          {currentLanguage === "en" ? "News" : "Noticias"}
+        </h1>
+      </div>
       <NewsSection />
+      <div className="p-4">
+        <h2 className="text-2xl font-bold">
+          Reddit
+        </h2>
+      </div>
       <Navbar />
     </div>
   );
