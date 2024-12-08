@@ -78,7 +78,7 @@ const NewsSection = () => {
                     : "translateX(-100%)",
               }}
             >
-              <div className="w-11/12 max-w-lg bg-white dark:bg-gray-300 bg-opacity-25 rounded-xl shadow-lg p-4 flex flex-col items-center">
+              <div className="w-11/12 max-w-lg bg-blue-200 bg-opacity-40 dark:bg-gray-300 rounded-xl shadow-lg p-4 flex flex-col items-center">
                 <a
                   href={article.url}
                   target="_blank"
@@ -111,7 +111,7 @@ const NewsSection = () => {
 };
 
 NewsSection.propTypes = {
-  isDarkTheme: PropTypes.bool.isRequired, // Validamos que isDarkTheme sea booleano y obligatorio
+  isDarkTheme: PropTypes.bool.isRequired,
 };
 
 export default NewsSection;

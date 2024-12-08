@@ -5,6 +5,7 @@ import Stories from "../components/Stories";
 import StoryModal from "../components/StoryModal";
 import Flashcards from "../components/Flashcards";
 import NewsSection from "../components/NewsSection";
+import RedditSection from "../components/RedditSection";
 import Navbar from "../components/Navbar";
 import sights1 from "../assets/stories/sights1.jpg";
 import sights2 from "../assets/stories/sights2.jpg";
@@ -74,9 +75,10 @@ const HomePage = () => {
       <NewsSection />
       <div className="p-4">
         <h2 className="text-2xl font-bold">
-          Reddit
+          Reddit /Visiting Mallorca
         </h2>
       </div>
+      <RedditSection />
       <Navbar />
     </div>
   );
