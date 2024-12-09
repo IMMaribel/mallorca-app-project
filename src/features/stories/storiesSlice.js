@@ -54,6 +54,10 @@ const initialState = {
         { id: 17, title: "Attractions 2" },
       ],
     },
+    {
+      name: "My Story",
+      stories: [], // Aquí se almacenarán las historias subidas por el usuario
+    },
   ],
   activeCategory: null,
   isModalOpen: false,

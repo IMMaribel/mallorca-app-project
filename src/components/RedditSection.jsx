@@ -31,7 +31,7 @@ const RedditSection = () => {
   }, []);
 
   return (
-    <section className="p-4 mb-16">
+    <section className="p-4">
       {loading ? (
         <p className="text-gray-500 dark:text-gray-300">Loading posts...</p>
       ) : posts.length === 0 ? (

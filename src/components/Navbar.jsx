@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { FaHome, FaCalendarAlt, FaMapMarkerAlt, FaUser } from "react-icons/fa";
+import { PiRobotFill } from "react-icons/pi";
 
 const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -29,10 +31,15 @@ const Navbar = () => {
         isVisible ? "translate-y-0" : "translate-y-24"
       }`}
     >
-      <FaHome className="text-2xl text-sky-700 hover:text-sky-500 transition" />
+      <Link to="/">
+        <FaHome className="text-2xl text-gray-400 hover:text-sky-500 transition" />
+      </Link>
       <FaCalendarAlt className="text-2xl text-gray-400 hover:text-sky-500 transition" />
       <FaMapMarkerAlt className="text-2xl text-gray-400 hover:text-sky-500 transition" />
-      <FaUser className="text-2xl text-gray-400 hover:text-sky-500 transition" />
+      <PiRobotFill className="text-3xl text-gray-400 hover:text-sky-500 transition" />
+      <Link to="/profile">
+        <FaUser className="text-2xl text-gray-400 hover:text-sky-500 transition" />
+      </Link>
     </nav>
   );
 };

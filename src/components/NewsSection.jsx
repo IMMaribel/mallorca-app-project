@@ -46,7 +46,7 @@ const NewsSection = () => {
 
   return (
     <section
-      className="flex items-center justify-center relative overflow-hidden h-[400px] sm:h-[500px] mt-[-20px] sm:mt-0"
+      className="flex items-center justify-center relative overflow-hidden h-[393px] sm:h-[500px] mt-[-20px] sm:mt-0"
       onTouchStart={handleStart}
       onTouchEnd={handleEnd}
       onMouseDown={handleStart}

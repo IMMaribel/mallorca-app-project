@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from '../firebaseConfig'; // Importar la configuración de Firebase
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addStory } from '../features/stories/storiesSlice';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
 const MyStory = () => {
   const dispatch = useDispatch();
-  const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const myStories = useSelector((state) =>
+    state.stories.categories.find((cat) => cat.name === "My Story")?.stories || []
+  );
 
   const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setImage(URL.createObjectURL(file));
+      setUploading(true);
 
       // Subir la imagen a Firebase Storage
       try {
@@ -59,8 +62,8 @@ const MyStory = () => {
         <div className={`w-20 h-20 rounded-full border-2 p-0.5 border-[#f06292] flex items-center justify-center overflow-hidden ${uploading ? 'animate-pulse' : ''}`}>
           {uploading ? (
             <span className="text-xs font-medium">Uploading...</span>
-          ) : image ? (
-            <img src={image} alt="My Story" className="w-full h-full object-cover rounded-full p-0.5" />
+          ) :  myStories.length > 0 ?  (
+            <img src={myStories[myStories.length - 1].image} alt="My Story" className="w-full h-full object-cover rounded-full p-0.5" />
           ) : (
             <div className="w-full h-full flex items-center justify-center rounded-full bg-gray-300">
               <span className="text-5xl text-gray-500 font-light mb-3">+</span>

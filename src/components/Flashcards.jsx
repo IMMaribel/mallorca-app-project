@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { FaHeart } from "react-icons/fa";
+import { addFavorite } from "../features/profile/favoritesSlice";
 import beachFlashcard from "../assets/flashcards/beachcreeks.jpg";
 import bellverFlashcard from "../assets/flashcards/bellver.jpg";
 import palmanightFlashcard from "../assets/flashcards/palmanight.jpg";
@@ -29,8 +31,9 @@ const Flashcards = () => {
     },
   ];
 
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites.favorites);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [favorites, setFavorites] = useState([]);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -46,13 +49,12 @@ const Flashcards = () => {
 
   const handleSwipe = () => {
     if (touchStartX.current - touchEndX.current > 50) {
-      handleNext(); // Deslizar a la izquierda
+      handleNext();
     } else if (touchEndX.current - touchStartX.current > 50) {
-      handlePrevious(); // Deslizar a la derecha
+      handlePrevious();
     }
   };
 
-  // Detectar arrastre con el ratón
   const handleMouseDown = (e) => {
     touchStartX.current = e.clientX;
   };
@@ -62,50 +64,37 @@ const Flashcards = () => {
     handleSwipe();
   };
 
-  // Mover a la siguiente flashcard
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % flashcardsData.length);
   };
 
-  // Mover a la flashcard anterior
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? flashcardsData.length - 1 : prevIndex - 1
     );
   };
 
-  // Alternar favoritos
-  const toggleFavorite = (id) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(id)
-        ? prevFavorites.filter((favId) => favId !== id)
-        : [...prevFavorites, id]
-    );
+  const handleToggleFavorite = (card) => {
+    dispatch(addFavorite(card));
   };
 
   return (
-    <section className="p-4">
+    <section className="p-4 overflow-hidden">
       <div
-        className="relative h-64 w-full"
+        className="relative h-64 w-full max-w-full"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
       >
         {flashcardsData.map((card, index) => {
-          // Calcular la posición de las tarjetas para superposición
           const isActive = currentIndex === index;
-          const isNext = (index - currentIndex + flashcardsData.length) % flashcardsData.length === 1;
 
           return (
             <div
               key={card.id}
-              className={`absolute h-full w-full rounded-lg shadow-md transition-transform duration-500 ${
-                isActive
-                  ? "z-10 scale-100 translate-x-0"
-                  : isNext
-                  ? "z-5 scale-90 translate-x-20"
-                  : "z-0 scale-75 translate-x-40 opacity-50"
+              className={`absolute h-full w-9/12 sm:w-80 rounded-lg shadow-md transition-transform duration-500 ${
+                isActive ? "z-10 scale-100 translate-x-0" : "z-0 scale-75 translate-x-24 opacity-50"
               }`}
               style={{
                 backgroundImage: `url(${card.image})`,
@@ -118,12 +107,12 @@ const Flashcards = () => {
                 {card.text}
               </p>
               <button
-                onClick={() => toggleFavorite(card.id)}
+                onClick={() => handleToggleFavorite(card)}
                 className="absolute top-4 right-4 z-10"
               >
                 <FaHeart
                   className={`text-lg transition-transform duration-300 ${
-                    favorites.includes(card.id)
+                    favorites.some((fav) => fav.id === card.id)
                       ? "text-rose-500 scale-125"
                       : "text-white"
                   }`}
