@@ -2,9 +2,9 @@ import { useState, useRef } from "react";
 import useFetchNews from "../hooks/useFetchNews";
 import PropTypes from "prop-types";
 
-const NewsSection = () => {
+const NewsSection = ({ isDarkTheme }) => {
   const { news, loading } = useFetchNews(
-    " https://newsapi.org/v2/everything?q=Mallorca&language=en&apiKey=97dd0f6b65834dcc98238b37a1337c29"
+    "https://newsapi.org/v2/everything?q=Mallorca&language=en&apiKey=97dd0f6b65834dcc98238b37a1337c29"
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -18,7 +18,9 @@ const NewsSection = () => {
 
   // Detectar final del deslizamiento táctil o de arrastre
   const handleEnd = (e) => {
-    touchEndX.current = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    touchEndX.current = e.changedTouches
+      ? e.changedTouches[0].clientX
+      : e.clientX;
     handleSwipe();
   };
 
@@ -46,7 +48,9 @@ const NewsSection = () => {
 
   return (
     <section
-      className="flex items-center justify-center relative overflow-hidden h-[393px] sm:h-[500px] mt-[-20px] sm:mt-0"
+      className={`flex items-center justify-center relative overflow-hidden h-[393px] sm:h-[500px] mt-[-20px] sm:mt-0 ${
+        isDarkTheme ? "bg-gray-900 text-white" : "bg-gray-100 text-black"
+      }`}
       onTouchStart={handleStart}
       onTouchEnd={handleEnd}
       onMouseDown={handleStart}
@@ -56,7 +60,8 @@ const NewsSection = () => {
         <p className="text-gray-500">Loading news...</p>
       ) : news.length === 0 ? (
         <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center transition-transform duration-500">
-        <p className="text-gray-500">No news available.</p></div>
+          <p className="text-gray-500">No news available.</p>
+        </div>
       ) : (
         <div className="relative w-full h-full overflow-hidden">
           {news.map((article, index) => (
@@ -96,8 +101,10 @@ const NewsSection = () => {
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`font-bold text-lg md:text-xl hover:underline}`}
-                    >
+                    className={`font-bold text-lg md:text-xl hover:underline ${
+                      isDarkTheme ? "text-white" : "text-black"
+                    }`}
+                  >
                     {article.title}
                   </a>
                 </div>

@@ -33,11 +33,11 @@ const MyStory = () => {
         // Despachar la acción para agregar la URL al estado de Redux
         dispatch(
           addStory({
-            categoryName: "My Story", // Nombre de la categoría
+            categoryName: "My Story", 
             story: {
-              id: Date.now(), // ID único basado en timestamp
-              title: file.name, // Nombre del archivo como título
-              image: downloadURL, // URL de descarga de Firebase
+              id: Date.now(), 
+              title: file.name, 
+              image: downloadURL,
             },
           })
         );

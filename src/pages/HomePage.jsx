@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../components/Header";
 import Stories from "../components/Stories";
@@ -24,6 +24,7 @@ import hotel1 from "../assets/stories/hotel1.jpg";
 import hotel2 from "../assets/stories/hotel2.jpg";
 import shopping1 from "../assets/stories/shopping1.jpg";
 import shopping2 from "../assets/stories/shopping2.jpg";
+import PropTypes from "prop-types";
 
 const imageMap = {
   1: sights1,
@@ -45,20 +46,16 @@ const imageMap = {
   17: atractions2
 };
 
-const HomePage = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  const currentLanguage = useSelector((state) => state.language.language);
+const HomePage = ({ isDarkTheme, toggleTheme, currentLanguage }) => {
   const categories = useSelector((state) => state.stories.categories);
 
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-    document.documentElement.classList.toggle("dark");
-  };
-
   return (
-    <div className={`min-h-screen ${isDarkTheme ? "bg-dark text-white" : "bg-light text-dark"}`}>
+    <div
+      className={`min-h-screen ${
+        isDarkTheme ? "bg-dark text-white" : "bg-light text-dark"
+      }`}
+    >
       <Header toggleTheme={toggleTheme} isDarkTheme={isDarkTheme} />
-      {/* Solo pasamos las categorías al componente Stories */}
       <Stories categories={categories} imageMap={imageMap} />
       <StoryModal imageMap={imageMap} />
       <div className="p-4">
@@ -72,16 +69,22 @@ const HomePage = () => {
           {currentLanguage === "en" ? "News" : "Noticias"}
         </h1>
       </div>
-      <NewsSection />
+      <NewsSection isDarkTheme={isDarkTheme} />
       <div className="p-4">
         <h2 className="text-2xl font-bold">
           Reddit /Visiting Mallorca
         </h2>
       </div>
-      <RedditSection />
+      <RedditSection isDarkTheme={isDarkTheme} />
       <Navbar />
     </div>
   );
+};
+
+HomePage.propTypes = {
+  isDarkTheme: PropTypes.bool.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+  currentLanguage: PropTypes.string.isRequired,
 };
 
 export default HomePage;

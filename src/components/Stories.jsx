@@ -27,12 +27,13 @@ const Stories = ({ categories, imageMap }) => {
   };
 
   return (
-    <div className="p-2 max-w-screen-xl mx-auto overflow-hidden">
+    <div className="p-2 max-w-screen-xl mx-auto overflow-hidden sm:hidden">
       <Slider {...settings}>
         <div className="pl-4">
           <MyStory />
         </div>
-        {categories.map((category, index) => {
+        {categories .filter((category) => category.name !== "My Story")
+        .map((category, index) => {
           const firstStory = category.stories[0];
           const imageSrc = firstStory ? imageMap[firstStory.id] : null;
           const isViewed = viewedCategories.includes(index);

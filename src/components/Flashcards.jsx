@@ -81,7 +81,7 @@ const Flashcards = () => {
   return (
     <section className="p-4 overflow-hidden">
       <div
-        className="relative h-64 w-full max-w-full"
+        className="relative h-64 w-full max-w-full lg:grid lg:grid-cols-3 lg:gap-4 lg:justify-center"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onMouseDown={handleMouseDown}
@@ -93,8 +93,9 @@ const Flashcards = () => {
           return (
             <div
               key={card.id}
-              className={`absolute h-full w-9/12 sm:w-80 rounded-lg shadow-md transition-transform duration-500 ${
-                isActive ? "z-10 scale-100 translate-x-0" : "z-0 scale-75 translate-x-24 opacity-50"
+              className={`absolute lg:static lg:w-auto h-full w-9/12 sm:w-80 rounded-lg shadow-md transition-transform duration-500  ${
+                isActive ?  "z-10 scale-100 translate-x-0"
+                  : "z-0 scale-75 translate-x-14 opacity-50 lg:opacity-100 lg:scale-100 lg:translate-x-0"
               }`}
               style={{
                 backgroundImage: `url(${card.image})`,
@@ -103,7 +104,7 @@ const Flashcards = () => {
               }}
             >
               <div className="absolute inset-0 bg-black bg-opacity-40 rounded-lg"></div>
-              <p className="z-10 text-white font-semibold text-base absolute bottom-8 left-4">
+              <p className=" text-white font-semibold text-base absolute bottom-8 left-4 right-2">
                 {card.text}
               </p>
               <button
