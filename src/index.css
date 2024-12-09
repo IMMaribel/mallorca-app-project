@@ -8,4 +8,10 @@
 
 body {
   @apply bg-light text-dark;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+video {
+  z-index: -1;
 }

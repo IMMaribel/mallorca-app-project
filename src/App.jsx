@@ -2,6 +2,10 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store";
+import LoadingPage from "./pages/LoadingPage";
+import StarterPage from "./pages/StarterPage";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import "./index.css";
@@ -22,10 +26,13 @@ function App() {
       <Router>
         <ErrorBoundary>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <HomePage
+          <Route path="/" element={<LoadingPage />} />
+          <Route path="/starter" element={<StarterPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route 
+              path="/home" 
+              element={<HomePage
                   isDarkTheme={isDarkTheme}
                   toggleTheme={toggleTheme}
                   currentLanguage={currentLanguage}
