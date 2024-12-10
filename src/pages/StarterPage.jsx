@@ -16,7 +16,7 @@ const StarterPage = () => {
       </video>
 
       {/* Header con el logo */}
-      <header className="absolute top-0 w-full bg-white bg-opacity-90 z-20 p-2 flex justify-center">
+      <header className="absolute top-0 w-full bg-white bg-opacity-9100 z-20 p-2 flex justify-center">
         <img
           src="./src/assets/Logo_def.png"
           alt="MallorcApp Logo"
@@ -38,13 +38,13 @@ const StarterPage = () => {
         {/* Botones de acción */}
         <div className="flex flex-col space-y-4 w-3/4 md:w-1/3">
           <button
-            className="bg-blue-600 bg-opacity-55 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-blue-600 transition"
+            className="bg-blue-600 bg-opacity-55 text-white px-6 py-2 rounded-lg text-lg font-medium hover:bg-blue-600 transition"
             onClick={() => navigate("/register")}
           >
             Register
           </button>
           <button
-            className="bg-white bg-opacity-50 text-black px-6 py-3 rounded-lg text-lg font-medium hover:bg-gray-200 transition"
+            className="bg-white bg-opacity-50 text-black px-6 py-2 rounded-lg text-lg font-medium hover:bg-gray-200 transition"
             onClick={() => navigate("/login")}
           >
             Login
