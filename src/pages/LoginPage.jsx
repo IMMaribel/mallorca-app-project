@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { FaGoogle } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth, googleProvider, signInWithPopup } from "../firebaseConfig";
 import { updateUser } from "../features/profile/userSlice";
 
@@ -12,6 +12,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetError, setResetError] = useState("");
+  const [resetSuccess, setResetSuccess] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -64,6 +68,23 @@ const LoginPage = () => {
       navigate("/profile");
     } catch (error) {
       console.error("Google Sign-In error:", error.message);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    setResetError("");
+    setResetSuccess("");
+    if (!resetEmail) {
+      setResetError("Please enter your email.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetSuccess("Password reset email sent. Check your inbox!");
+    } catch (error) {
+      setResetError("Failed to send password reset email. Please try again.");
+      console.error("Password reset error:", error.message);
     }
   };
 
@@ -128,15 +149,46 @@ const LoginPage = () => {
 
           {errors.general && <p className="text-red-500 text-sm mt-4">{errors.general}</p>}
 
-        {/* Enlace de contraseña olvidada */}
-        <div className="w-full max-w-md text-right mt-2">
+                {/* Forgot Password */}
+                <div className="w-full max-w-md text-right mt-2">
           <button
             className="text-blue-400 text-sm underline hover:text-gray-300"
-            onClick={() => console.log("Forgot Password Clicked")}
+            onClick={() => setShowForgotPassword(true)}
           >
             Forgot password?
           </button>
         </div>
+
+        {/* Modal de "Forgot Password" */}
+        {showForgotPassword && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-md flex-col">
+              <h2 className="text-xl font-bold mb-4">Reset Password</h2>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                className="w-full p-3 rounded-sm bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              />
+              {resetError && <p className="text-red-500 text-sm">{resetError}</p>}
+              {resetSuccess && <p className="text-green-500 text-sm">{resetSuccess}</p>}
+              <div className="flex flex-row justify-between">
+              <button
+                onClick={handleForgotPassword}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+              >
+                Send Reset Email
+              </button>
+              <button
+                onClick={() => setShowForgotPassword(false)}
+                className="mt-4 text-blue-500 underline"
+              >
+                Close
+              </button></div>
+            </div>
+          </div>
+        )}
 
           <button
             type="submit"
@@ -145,7 +197,7 @@ const LoginPage = () => {
             Login
           </button>
         </form>
-
+        <div className="flex flex-col items-center justify-center">
         {/* Línea de separación */}
         <div className="flex items-center my-6 w-full max-w-md">
           <hr className="flex-grow border-gray-300" />
@@ -174,7 +226,7 @@ const LoginPage = () => {
             <FaApple className="mr-3" /> Continue with Apple
           </button> */}
         </div>
-
+        </div>
         {/* Enlace para crear cuenta */}
         <p className="mt-6 text-white text-sm text-end">
           Don&apos;t have an account?{" "}
