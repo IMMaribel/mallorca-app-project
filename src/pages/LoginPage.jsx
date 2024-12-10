@@ -65,7 +65,7 @@ const LoginPage = () => {
         })
       );
 
-      navigate("/profile");
+      navigate("/home");
     } catch (error) {
       console.error("Google Sign-In error:", error.message);
     }

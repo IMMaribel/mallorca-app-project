@@ -66,7 +66,7 @@ const MyStory = () => {
             <img src={myStories[myStories.length - 1].image} alt="My Story" className="w-full h-full object-cover rounded-full p-0.5" />
           ) : (
             <div className="w-full h-full flex items-center justify-center rounded-full bg-gray-300">
-              <span className="text-5xl text-gray-500 font-light mb-3">+</span>
+              <span className="text-4xl text-gray-500 font-thin">+</span>
             </div>
           )}
         </div>

@@ -5,13 +5,14 @@ import { FaGoogle } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider, signInWithPopup } from "../firebaseConfig";
-import { updateUser } from "../features/profile/userSlice"; // Asegúrate de importar esto
+import { updateUser } from "../features/profile/userSlice";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
   const [errors, setErrors] = useState({});
 
   const validateInputs = () => {
@@ -66,7 +67,7 @@ const RegisterPage = () => {
         })
       );
 
-      navigate("/profile");
+      navigate("/home");
     } catch (error) {
       console.error("Error registering:", error.message);
       if (error.code === "auth/email-already-in-use") {
@@ -94,7 +95,7 @@ const RegisterPage = () => {
         })
       );
 
-      navigate("/profile");
+      navigate("/home");
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error.message);
     }
@@ -123,7 +124,7 @@ const RegisterPage = () => {
 
       {/* Contenido principal */}
       <div className="relative z-10 flex flex-col h-full bg-black bg-opacity-40 mt-10 px-4 justify-center">
-        <div className="relative w-full flex items-center  -mt-24">
+        <div className="relative w-full flex items-center -mt-24">
           {/* Botón de la flecha alineado a la izquierda */}
           <button
             onClick={() => navigate("/starter")}
@@ -136,7 +137,7 @@ const RegisterPage = () => {
           <h1 className="absolute w-full text-center text-2xl md:text-4xl font-bold text-white sm:-mt-32">
             Register
           </h1>
-      </div>
+        </div>
 
         <form
           className="flex flex-col space-y-2 items-center justify-center mx-6 mt-10"
@@ -148,21 +149,34 @@ const RegisterPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 rounded-sm bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-          /> 
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-2 overflow-auto">{errors.email}</p>
-            )}
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 rounded-sm bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-2 overflow-auto">{errors.password}</p>
-            )}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-2 overflow-auto">
+              {errors.email}
+            </p>
+          )}
+
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-sm bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 cursor-pointer text-gray-500"
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </span>
+          </div>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-2 overflow-auto">
+              {errors.password}
+            </p>
+          )}
+
           <button
             type="submit"
             className="w-2/3 bg-white bg-opacity-90 text-black py-1 rounded-lg text-base font-semibold hover:bg-gray-300 transition"

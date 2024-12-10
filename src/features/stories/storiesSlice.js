@@ -94,6 +94,7 @@ const storiesSlice = createSlice({
     },
     setActiveCategory(state, action) {
       state.activeCategory = action.payload;
+      state.isModalOpen = true;
     },
     markCategoryAsViewed(state, action) {
       const categoryIndex = action.payload;

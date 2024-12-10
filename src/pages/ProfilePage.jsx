@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,8 @@ import { FaHeart } from "react-icons/fa";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { IoIosLogOut } from "react-icons/io";
 import { auth } from "../firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { updateUser } from "../features/profile/userSlice";
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -50,6 +53,33 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
     }
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        const providerId = currentUser.providerData[0]?.providerId;
+        dispatch(
+          updateUser({
+            name:
+              providerId === "google.com"
+                ? currentUser.displayName
+                : currentUser.email,
+            email:
+              providerId === "google.com"
+              ? currentUser.displayEmail
+              : "" ,
+            profilePicture:
+              providerId === "google.com"
+                ? currentUser.photoURL
+                : "src/assets/M.png",
+            uid: currentUser.uid,
+          })
+        );
+      }
+    });
+
+    return () => unsubscribe(); // Limpia el listener al desmontar
+  }, [dispatch]);
+  
   return (
     <div
       className={`min-h-screen ${
@@ -70,14 +100,24 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
         <section className="mb-10 text-center">
           <div className="relative inline-block">
             <img
-              src={user.profilePicture || "/assets/placeholder-profile.jpg"}
+              src={
+                user.profilePicture ||
+                (auth.currentUser?.providerData[0]?.providerId === "google.com"
+                  ? auth.currentUser.photoURL
+                  : "src/assets/M.png")
+              }
               alt="User Profile"
               className="w-32 h-32 rounded-full object-cover mx-auto border-4 border-blue-500"
             />
           </div>
-          <h1 className="text-3xl font-bold mt-4">{user.name || "Guest"}</h1>
+          <h1 className="text-3xl font-bold mt-4">
+            {user.name ||
+              (auth.currentUser?.providerData[0]?.providerId === "google.com"
+                ? auth.currentUser.displayName
+                : user.email)}
+          </h1>
           <p className="text-sm text-gray-500 dark:text-gray-300">
-            {user.email || "No email provided"}
+            {user.email || ""}
           </p>
         </section>
 
@@ -103,6 +143,9 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
                     alt={item.text}
                     className="w-full h-40 object-cover"
                   />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-white text-center px-2">{item.text}</p>
+                </div>
                 </div>
               ))}
             </div>

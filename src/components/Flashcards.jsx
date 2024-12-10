@@ -79,9 +79,9 @@ const Flashcards = () => {
   };
 
   return (
-    <section className="p-4 overflow-hidden">
+    <section className="p-8 overflow-hidden">
       <div
-        className="relative h-64 w-full max-w-full lg:grid lg:grid-cols-3 lg:gap-4 lg:justify-center"
+        className="relative h-64 w-full max-w-full flex items-center justify-center overflow-hidden  sm:h-[500px] mt-[-20px] sm:mt-0"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onMouseDown={handleMouseDown}

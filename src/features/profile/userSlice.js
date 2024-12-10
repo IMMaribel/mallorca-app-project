@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: "",
-  email: "",
-  profilePicture: "",
+  name: null,
+  email: null,
+  profilePicture: null,
+  uid: null,
 };
 
 const userSlice = createSlice({
@@ -14,11 +15,13 @@ const userSlice = createSlice({
       state.name = action.payload.name || state.name;
       state.email = action.payload.email || state.email;
       state.profilePicture = action.payload.profilePicture || state.profilePicture;
+      state.uid = action.payload.uid || state.uid;
     },
     logoutUser(state) {
-      state.name = "";
-      state.email = "";
-      state.profilePicture = "";
+      state.name = null;
+      state.email = null;
+      state.profilePicture = null;
+      state.uid = null;
     },
   },
 });
