@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, googleProvider, signInWithPopup } from "../firebaseConfig";
@@ -113,7 +113,7 @@ const RegisterPage = () => {
       </video>
 
       {/* Header con logo */}
-      <header className="absolute top-0 w-full bg-white bg-opacity-9100 z-20 p-2 flex justify-center">
+      <header className="absolute top-0 w-full bg-white bg-opacity-100 z-20 p-2 flex justify-center">
         <img
           src="./src/assets/Logo_def.png"
           alt="MallorcApp Logo"
@@ -123,7 +123,7 @@ const RegisterPage = () => {
 
       {/* Contenido principal */}
       <div className="relative z-10 flex flex-col h-full bg-black bg-opacity-40 mt-10 px-4 justify-center">
-        <div className="relative w-full flex items-center">
+        <div className="relative w-full flex items-center  -mt-24">
           {/* Botón de la flecha alineado a la izquierda */}
           <button
             onClick={() => navigate("/starter")}
@@ -159,6 +159,7 @@ const RegisterPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 rounded-sm bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          
             {errors.password && (
               <p className="text-red-500 text-sm mt-2 overflow-auto">{errors.password}</p>
             )}
@@ -186,7 +187,7 @@ const RegisterPage = () => {
       >
         <FaGoogle className="mr-3" /> Continue with Google
       </button>
-      <button
+      {/* <button
         className="w-full flex items-center justify-center bg-white bg-opacity-60 text-black px-6 py-1 rounded-lg text-base font-semibold hover:bg-gray-200 transition"
         onClick={() => console.log("Facebook Sign-Up")}
       >
@@ -197,7 +198,7 @@ const RegisterPage = () => {
         onClick={() => console.log("Apple Sign-Up")}
       >
         <FaApple className="mr-3" /> Continue with Apple
-      </button>
+      </button> */}
     </div>
 
   {/* Enlace para iniciar sesión */}
