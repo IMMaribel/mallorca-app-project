@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   name: "John Doe",
   email: "johndoe@example.com",
-  profilePicture: "./src/assets/M.png", // Puedes cambiarlo por una URL de tu imagen de perfil
+  profilePicture: "./src/assets/M.png",
 };
 
 const userSlice = createSlice({

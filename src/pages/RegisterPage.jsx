@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig"
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -40,15 +42,41 @@ const RegisterPage = () => {
     return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (validateInputs()) {
-      console.log("User Registered:", { email, password });
+    setErrors({}); // Reiniciar errores previos
+  
+    if (!validateInputs()) {
+      return; // Validación fallida
+    }
+  
+    try {
+      // Registrar el usuario en Firebase
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log("User registered successfully:", user);
+  
+      // Navegar a la página de inicio
       navigate("/home");
+    } catch (error) {
+      // Manejo de errores específicos de Firebase
+      console.error("Error registering user:", error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setErrors({ email: "This email is already in use." });
+      } else if (error.code === "auth/invalid-email") {
+        setErrors({ email: "Please enter a valid email." });
+      } else if (error.code === "auth/weak-password") {
+        setErrors({ password: "Password is too weak." });
+      } else {
+        setErrors({ general: "Something went wrong. Please try again." });
+      }
     }
   };
-
+  
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Video de fondo */}

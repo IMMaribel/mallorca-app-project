@@ -1,32 +1,74 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // Lógica de inicio de sesión
-    console.log("User Logged In");
-    navigate("/home");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setErrors({});
+
+    if (!email || !password) {
+      setErrors({ general: "Both fields are required." });
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log("User logged in:", userCredential.user);
+
+      // Navegar a la página de inicio
+      navigate("/home");
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+      if (error.code === "auth/user-not-found") {
+        setErrors({ general: "No account found for this email." });
+      } else if (error.code === "auth/wrong-password") {
+        setErrors({ general: "Incorrect password." });
+      } else {
+        setErrors({ general: "Something went wrong. Please try again." });
+      }
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <form className="flex flex-col space-y-4">
+    <div className="relative h-screen w-screen overflow-hidden">
+      <form
+        className="relative z-10 flex flex-col items-center justify-center h-full px-4"
+        onSubmit={handleLogin}
+      >
+        <h1 className="text-4xl font-bold mb-6">Login</h1>
+
         <input
           type="email"
           placeholder="Email"
-          className="border p-2 rounded"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full max-w-md px-4 py-3 rounded-lg bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
         />
         <input
           type="password"
           placeholder="Password"
-          className="border p-2 rounded"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full max-w-md px-4 py-3 rounded-lg bg-white bg-opacity-80 text-black focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
         />
+        {errors.general && (
+          <p className="text-red-500 text-sm mb-4">{errors.general}</p>
+        )}
+
         <button
-          type="button"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={handleLogin}
+          type="submit"
+          className="w-full max-w-md bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 transition"
         >
           Login
         </button>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -10,6 +11,8 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebaseConfig";
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(false);
@@ -20,6 +23,18 @@ function App() {
     setIsDarkTheme((prev) => !prev);
     document.documentElement.classList.toggle("dark");
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is logged in:", user);
+      } else {
+        console.log("No user is logged in.");
+      }
+    });
+  
+    return () => unsubscribe(); // Limpia el listener al desmontar
+  }, []);
 
   return (
     <Provider store={store}>
