@@ -31,7 +31,7 @@ const Navbar = () => {
         isVisible ? "translate-y-0" : "translate-y-24"
       }`}
     >
-      <Link to="/">
+      <Link to="/home">
         <FaHome className="text-2xl text-gray-400 hover:text-sky-500 transition" />
       </Link>
       <FaCalendarAlt className="text-2xl text-gray-400 hover:text-sky-500 transition" />

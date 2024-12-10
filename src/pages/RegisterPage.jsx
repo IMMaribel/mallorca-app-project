@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig"
+import { auth, googleProvider, signInWithPopup } from "../firebaseConfig";
+import { updateUser } from "../features/profile/userSlice"; // Asegúrate de importar esto
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -14,14 +17,12 @@ const RegisterPage = () => {
   const validateInputs = () => {
     const newErrors = {};
 
-    // Validar email
     if (!email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = "An email is required.";
     } else if (!email.includes("@") || !email.match(/.+@.+\..+/)) {
-      newErrors.email = "Please enter a valid email address.";
+      newErrors.email = "Please enter a valid email.";
     }
 
-    // Validar contraseña
     if (!password.trim()) {
       newErrors.password = "Password is required.";
     } else {
@@ -29,7 +30,7 @@ const RegisterPage = () => {
         newErrors.password = "Password must be at least 6 characters long.";
       }
       if (!/\d/.test(password)) {
-        newErrors.password = "Password must include at least one number.";
+        newErrors.password = "The password must include at least one number.";
       }
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
         newErrors.password =
@@ -38,45 +39,67 @@ const RegisterPage = () => {
     }
 
     setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0; // Retorna true si no hay errores
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setErrors({}); // Reiniciar errores previos
-  
+    setErrors({});
+
     if (!validateInputs()) {
-      return; // Validación fallida
+      return;
     }
-  
+
     try {
-      // Registrar el usuario en Firebase
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
       const user = userCredential.user;
-      console.log("User registered successfully:", user);
-  
-      // Navegar a la página de inicio
-      navigate("/home");
+
+      dispatch(
+        updateUser({
+          name: user.displayName || "New User",
+          email: user.email,
+          profilePicture: user.photoURL || "/assets/placeholder-profile.jpg",
+        })
+      );
+
+      navigate("/profile");
     } catch (error) {
-      // Manejo de errores específicos de Firebase
-      console.error("Error registering user:", error.message);
+      console.error("Error registering:", error.message);
       if (error.code === "auth/email-already-in-use") {
-        setErrors({ email: "This email is already in use." });
+        setErrors({ email: "This email is already registered." });
       } else if (error.code === "auth/invalid-email") {
         setErrors({ email: "Please enter a valid email." });
       } else if (error.code === "auth/weak-password") {
-        setErrors({ password: "Password is too weak." });
+        setErrors({ password: "Password too weak." });
       } else {
         setErrors({ general: "Something went wrong. Please try again." });
       }
     }
   };
-  
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      dispatch(
+        updateUser({
+          name: user.displayName,
+          email: user.email,
+          profilePicture: user.photoURL,
+        })
+      );
+
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error al iniciar sesión con Google:", error.message);
+    }
+  };
+
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Video de fondo */}
@@ -159,7 +182,7 @@ const RegisterPage = () => {
     <div className="flex flex-col space-y-4 w-full max-w-md">
       <button
         className="w-full flex items-center justify-center bg-white bg-opacity-60 text-black px-6 py-1 rounded-lg text-base font-semibold hover:bg-gray-200 transition"
-        onClick={() => console.log("Google Sign-Up")}
+        onClick={handleGoogleSignIn}
       >
         <FaGoogle className="mr-3" /> Continue with Google
       </button>

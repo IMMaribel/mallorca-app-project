@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth, googleProvider, signInWithPopup } from "../firebaseConfig";
+import { updateUser } from "../features/profile/userSlice";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
 
     if (!email || !password) {
-      setErrors({ general: "Both fields are required." });
+      setErrors({ general: "Ambos campos son obligatorios." });
       return;
     }
 
@@ -24,19 +28,44 @@ const LoginPage = () => {
         email,
         password
       );
-      console.log("User logged in:", userCredential.user);
+      const user = userCredential.user;
 
-      // Navegar a la página de inicio
+      dispatch(
+        updateUser({
+          name: user.displayName || "Usuario",
+          email: user.email,
+          profilePicture: user.photoURL || "/assets/placeholder-profile.jpg",
+        })
+      );
+
       navigate("/home");
     } catch (error) {
-      console.error("Error logging in:", error.message);
       if (error.code === "auth/user-not-found") {
-        setErrors({ general: "No account found for this email." });
+        setErrors({ general: "No se encontró ninguna cuenta con este email." });
       } else if (error.code === "auth/wrong-password") {
-        setErrors({ general: "Incorrect password." });
+        setErrors({ general: "La contraseña es incorrecta." });
       } else {
-        setErrors({ general: "Something went wrong. Please try again." });
+        setErrors({ general: "Algo salió mal. Intenta nuevamente." });
       }
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      dispatch(
+        updateUser({
+          name: user.displayName,
+          email: user.email,
+          profilePicture: user.photoURL,
+        })
+      );
+
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error con Google Sign-In:", error.message);
     }
   };
 
@@ -73,6 +102,47 @@ const LoginPage = () => {
           Login
         </button>
       </form>
+      <div className="flex flex-col items-center justify-center">
+        {/* Línea de separación */}
+        <div className="flex items-center my-6 w-full max-w-md">
+          <hr className="flex-grow border-gray-300" />
+          <span className="px-4 text-white">or</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
+
+        {/* Botones de registro social */}
+        <div className="flex flex-col space-y-4 w-full max-w-md">
+          <button
+            className="w-full flex items-center justify-center bg-white bg-opacity-60 text-black px-6 py-1 rounded-lg text-base font-semibold hover:bg-gray-200 transition"
+            onClick={handleGoogleSignIn}
+          >
+            <FaGoogle className="mr-3" /> Continue with Google
+          </button>
+          <button
+            className="w-full flex items-center justify-center bg-white bg-opacity-60 text-black px-6 py-1 rounded-lg text-base font-semibold hover:bg-gray-200 transition"
+            onClick={() => console.log("Facebook Sign-Up")}
+          >
+            <FaFacebookF className="mr-3" /> Continue with Facebook
+          </button>
+          <button
+            className="w-full flex items-center justify-center bg-white bg-opacity-60 text-black px-6 py-1 rounded-lg text-base font-semibold hover:bg-gray-200 transition"
+            onClick={() => console.log("Apple Sign-Up")}
+          >
+            <FaApple className="mr-3" /> Continue with Apple
+          </button>
+        </div>
+
+      {/* Enlace para iniciar sesión */}
+        <p className="mt-6 text-white text-sm">
+          Already have an account?{" "}
+          <button
+            onClick={() => navigate("/login")}
+            className="underline text-blue-400 hover:text-gray-300"
+          >
+            Login
+          </button>
+        </p>
+      </div>
     </div>
   );
 };

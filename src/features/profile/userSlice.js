@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: "John Doe",
-  email: "johndoe@example.com",
-  profilePicture: "./src/assets/M.png",
+  name: "",
+  email: "",
+  profilePicture: "",
 };
 
 const userSlice = createSlice({
@@ -15,8 +15,13 @@ const userSlice = createSlice({
       state.email = action.payload.email || state.email;
       state.profilePicture = action.payload.profilePicture || state.profilePicture;
     },
+    logoutUser(state) {
+      state.name = "";
+      state.email = "";
+      state.profilePicture = "";
+    },
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, logoutUser } = userSlice.actions;
 export default userSlice.reducer;
