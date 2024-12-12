@@ -12,7 +12,7 @@ import sights3 from "../assets/stories/sights3.jpg";
 import experience1 from "../assets/stories/experience1.jpg";
 import experience2 from "../assets/stories/experience2.jpg";
 import experience3 from "../assets/stories/experience3.jpg";
-import arts1 from "../assets/stories/arts1.jpg";
+import arts1 from "../assets/stories/arts1.png";
 import arts2 from "../assets/stories/arts2.jpg";
 import atractions1 from "../assets/stories/atractions1.jpg";
 import atractions2 from "../assets/stories/atractions2.jpg";

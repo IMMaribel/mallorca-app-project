@@ -74,37 +74,39 @@ const StoryModal = ({ imageMap }) => {
       className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
       onTouchStart={(e) => e.touches[0]?.clientY > 200 && handleClose()}
     >
-      <div className="relative w-full max-w-lg mx-auto p-4 rounded-md text-white">
-        {/* Contenedor de la historia */}
-        <div
-          className="relative w-full h-[400px] flex items-center justify-center"
-          onClick={(e) => {
-            const clickX = e.clientX;
-            const width = window.innerWidth;
-            if (clickX < width / 2) {
-              previousStory();
-            } else {
-              nextStory();
-            }
-          }}
-        >
+      {/* Contenedor del modal */}
+      <div className="relative w-full h-full">
+        {/* Título y botón de cierre */}
+        <div className="absolute top-0 left-0 w-full flex justify-between items-center px-2 py-2 bg-black bg-opacity-20">
+          <h2 className="text-base font-semibold text-white">{currentCategory?.name || "Category"}</h2>
+          <button
+            onClick={handleClose}
+            className="text-white text-2xl font-bold hover:text-gray-300"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Imagen ajustada */}
+        <div className="w-full h-full flex items-center justify-center"
+            onClick={(e) => {
+              const clickX = e.clientX;
+              const width = window.innerWidth;
+              if (clickX < width / 2) {
+                previousStory();
+              } else {
+                nextStory();
+              }
+            }}>
           <img
             src={imageSrc}
             alt={currentStory.title}
-            className="w-full h-full object-cover rounded-md"
+            className="w-auto h-auto object-cover"
           />
-          <h2 className="absolute bottom-4 left-4 text-lg font-bold">{currentStory.title}</h2>
         </div>
-
-        {/* Botón para cerrar */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 text-white p-2"
-        >
-          X
-        </button>
       </div>
     </div>
+
   );
 };
 
