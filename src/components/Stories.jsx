@@ -32,7 +32,8 @@ const Stories = ({ categories, imageMap }) => {
         <div className="pl-4">
           <MyStory />
         </div>
-        {categories .filter((category) => category.name !== "My Story")
+        {(categories || [])
+        .filter((category) => category.name !== "My Story")
         .map((category, index) => {
           const firstStory = category.stories[0];
           const imageSrc = firstStory ? imageMap[firstStory.id] : null;

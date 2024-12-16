@@ -1,21 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  name: null,
-  email: null,
-  profilePicture: null,
-  uid: null,
+  favorites: [],
+  myStories: [],
+  user: {
+    name: "",
+    email: "",
+    profilePicture: "",
+    uid: "",
+  },
 };
+
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     updateUser(state, action) {
-      state.name = action.payload.name || state.name;
-      state.email = action.payload.email || state.email;
-      state.profilePicture = action.payload.profilePicture || state.profilePicture;
-      state.uid = action.payload.uid || state.uid;
+      return {
+        ...state,
+        name: action.payload.name || state.name,
+        email: action.payload.email || state.email,
+        profilePicture: action.payload.profilePicture || state.profilePicture,
+        uid: action.payload.uid || state.uid,
+      };
     },
     logoutUser(state) {
       state.name = null;

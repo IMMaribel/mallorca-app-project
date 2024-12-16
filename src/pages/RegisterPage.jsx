@@ -67,7 +67,7 @@ const RegisterPage = () => {
         })
       );
 
-      navigate("/home");
+      navigate("/carousel");
     } catch (error) {
       console.error("Error registering:", error.message);
       if (error.code === "auth/email-already-in-use") {
@@ -95,7 +95,7 @@ const RegisterPage = () => {
         })
       );
 
-      navigate("/home");
+      navigate("/carousel");
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error.message);
     }
@@ -178,6 +178,7 @@ const RegisterPage = () => {
           )}
 
           <button
+            onClick={() => navigate("/carousel")}
             type="submit"
             className="w-2/3 bg-white bg-opacity-90 text-black py-1 rounded-lg text-base font-semibold hover:bg-gray-300 transition"
           >

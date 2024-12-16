@@ -7,6 +7,7 @@ import LoadingPage from "./pages/LoadingPage";
 import StarterPage from "./pages/StarterPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import CarouselInfo from "./pages/CarouselInfo";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import "./index.css";
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={<LoadingPage />} />
           <Route path="/starter" element={<StarterPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/carousel" element={<CarouselInfo />} />
           <Route path="/login" element={<LoginPage />} />
           <Route 
               path="/home" 

@@ -61,12 +61,9 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
           updateUser({
             name:
               providerId === "google.com"
-                ? currentUser.displayName
-                : currentUser.email,
-            email:
-              providerId === "google.com"
-              ? currentUser.displayEmail
-              : "" ,
+                ? currentUser.displayName || currentUser.email.split("@")[0]
+                : currentUser.email.split("@")[0],
+            email: currentUser.email || "",
             profilePicture:
               providerId === "google.com"
                 ? currentUser.photoURL
@@ -76,10 +73,10 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
         );
       }
     });
-
+  
     return () => unsubscribe(); // Limpia el listener al desmontar
   }, [dispatch]);
-  
+    
   return (
     <div
       className={`min-h-screen ${
@@ -96,30 +93,25 @@ const ProfilePage = ({ isDarkTheme, currentLanguage }) => {
         </button>
         <Tooltip id="logoutTooltip" content="Logout" place="top" />
 
-        {/* Encabezado del perfil */}
-        <section className="mb-10 text-center">
-          <div className="relative inline-block">
-            <img
-              src={
-                user.profilePicture ||
-                (auth.currentUser?.providerData[0]?.providerId === "google.com"
-                  ? auth.currentUser.photoURL
-                  : "src/assets/M.png")
-              }
-              alt="User Profile"
-              className="w-32 h-32 rounded-full object-cover mx-auto border-4 border-blue-500"
-            />
-          </div>
-          <h1 className="text-3xl font-bold mt-4">
-            {user.name ||
-              (auth.currentUser?.providerData[0]?.providerId === "google.com"
-                ? auth.currentUser.displayName
-                : user.email)}
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-300">
-            {user.email || ""}
-          </p>
-        </section>
+      {/* Encabezado del perfil */}
+      <section className="mb-10 text-center">
+        <div className="relative inline-block">
+          <img
+            src={
+              user.profilePicture ||
+              "src/assets/M.png"
+            }
+            alt="User Profile"
+            className="w-32 h-32 rounded-full object-cover mx-auto border-4 border-blue-500"
+          />
+        </div>
+        <h1 className="text-3xl font-bold mt-4">
+          {user.name || "Guest"}
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-300">
+          {user.email || ""}
+        </p>
+      </section>
 
         {/* Favoritos */}
         <section className="mb-12">

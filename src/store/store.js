@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import themeReducer from '../features/theme/themeSlice';
 import languageReducer from '../features/language/languageSlice';
-import storiesReducer from '../features/stories/storiesSlice';
+import storiesReducer from "../features/stories/storiesSlice";
 import userReducer from "../features/profile/userSlice";
-import favoritesReducer from "../features/profile/favoritesSlice";
+import favoritesReducer from "../features/profile/favoritesSlice"
 
 export const store = configureStore({
   reducer: {
